@@ -1,6 +1,6 @@
 package io.github.ficcitong.kvstore;
 
-class InnerNode<E extends Comparable<E>> extends Node<E> {
+class InnerNode extends Node {
   private Object[] children;
 
   public InnerNode() {
@@ -8,12 +8,11 @@ class InnerNode<E extends Comparable<E>> extends Node<E> {
     this.children = new Object[ORDER + 2];
   }
 
-  @SuppressWarnings("unchecked")
-  public Node<E> getChild(int index) {
-    return (Node<E>) this.children[index];
+  public Node getChild(int index) {
+    return (Node) this.children[index];
   }
 
-  public void setChild(int index, Node<E> child) {
+  public void setChild(int index, Node child) {
     this.children[index] = child;
     if (child != null) {
       child.setParent(this);
@@ -39,7 +38,7 @@ class InnerNode<E extends Comparable<E>> extends Node<E> {
     return index;
   }
 
-  private void insertAt(int index, E key, Node<E> leftChild, Node<E> rightChild) {
+  private void insertAt(int index, String key, Node leftChild, Node rightChild) {
     // move space for the new key
     for (int i = this.getElementCount() + 1; i > index; --i) {
       this.setChild(i, this.getChild(i - 1));
@@ -56,10 +55,10 @@ class InnerNode<E extends Comparable<E>> extends Node<E> {
   }
 
   @Override
-  protected InnerNode<E> split() {
+  protected InnerNode split() {
     int midIndex = this.getElementCount() / 2;
 
-    InnerNode<E> newNode = new InnerNode<E>();
+    InnerNode newNode = new InnerNode();
     for (int i = midIndex + 1; i < this.getElementCount(); ++i) {
       newNode.setElement(i - midIndex - 1, this.getElement(i));
       this.setElement(i, null);
@@ -77,11 +76,11 @@ class InnerNode<E extends Comparable<E>> extends Node<E> {
   }
 
   @Override
-  protected Node<E> solveOverflow() {
-    Node<E> newNode = this.split();
+  protected Node solveOverflow() {
+    Node newNode = this.split();
 
     if (this.getParent() == null) {
-      this.setParent(new InnerNode<E>());
+      this.setParent(new InnerNode());
     }
     newNode.setParent(this.getParent());
 
@@ -89,18 +88,17 @@ class InnerNode<E extends Comparable<E>> extends Node<E> {
     int midIndex = this.getElementCount() / 2;
     String upKey = (String) this.getElement(midIndex);
 
-    InnerNode<E> newInnerNode = (InnerNode<E>) this.getParent();
+    InnerNode newInnerNode = (InnerNode) this.getParent();
 
     return newInnerNode.pushKeyUp(upKey, this, newNode);
   }
 
-  @SuppressWarnings("unchecked")
-  protected Node<E> pushKeyUp(String key, Node<E> leftChild, Node<E> rightNode) {
+  protected Node pushKeyUp(String key, Node leftChild, Node rightNode) {
     // find the target position of the new key
     int index = this.search(key);
 
     // insert the new key
-    this.insertAt(index, (E) key, leftChild, rightNode);
+    this.insertAt(index, key, leftChild, rightNode);
 
     // check whether current node need to be split
     if (this.isOverflow()) {

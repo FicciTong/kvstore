@@ -1,22 +1,22 @@
 package io.github.ficcitong.kvstore;
 
-public class KeyValueStore<E extends Comparable<E>> implements KeysAndValues {
-  private Node<E> root;
+public class KeyValueStore implements KeysAndValues {
+  private Node root;
 
   public KeyValueStore() {
-    this.root = new LeafNode<E>();
+    this.root = new LeafNode();
   }
 
   public void insert(KeyValuePair kvPair) {
-    Node<E> node = this.root;
+    Node node = this.root;
     while (node.getNodeType() == NodeType.InnerNode) {
-      node = ((InnerNode<E>) node).getChild(node.search(kvPair.getKey()));
+      node = ((InnerNode) node).getChild(node.search(kvPair.getKey()));
     }
-    LeafNode<E> leaf = (LeafNode<E>) node;
+    LeafNode leaf = (LeafNode) node;
     leaf.insertKeyValuePair(kvPair);
 
     if (leaf.isOverflow()) {
-      Node<E> n = leaf.solveOverflow();
+      Node n = leaf.solveOverflow();
       if (n != null) {
         this.root = n;
       }

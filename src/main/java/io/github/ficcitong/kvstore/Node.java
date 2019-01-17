@@ -1,18 +1,17 @@
 package io.github.ficcitong.kvstore;
 
-abstract class Node<E> {
-  protected static final int ORDER = 4;
+abstract class Node {
+  protected static final int ORDER = 2;
 
   protected Object[] elements;
   protected int elementCount;
-  protected Node<E> parent;
+  protected Node parent;
 
-  @SuppressWarnings("unchecked")
-  public E getElement(int index) {
-    return (E) this.elements[index];
+  public Object getElement(int index) {
+    return this.elements[index];
   }
 
-  public void setElement(int index, E element) {
+  public void setElement(int index, Object element) {
     this.elements[index] = element;
   }
 
@@ -20,11 +19,11 @@ abstract class Node<E> {
     return this.elementCount;
   }
 
-  public Node<E> getParent() {
+  public Node getParent() {
     return this.parent;
   }
 
-  public void setParent(Node<E> parent) {
+  public void setParent(Node parent) {
     this.parent = parent;
   }
 
@@ -32,11 +31,11 @@ abstract class Node<E> {
 
   public abstract int search(String key);
 
-  protected abstract Node<E> split();
+  protected abstract Node split();
 
   public boolean isOverflow() {
     return this.getElementCount() == this.elements.length;
   }
 
-  protected abstract Node<E> solveOverflow();
+  protected abstract Node solveOverflow();
 }

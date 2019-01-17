@@ -4,7 +4,7 @@ public class App {
 
   public static void main(String[] args) {
 
-    KeysAndValues kv = new KeyValueStore<String>();
+    KeysAndValues kv = new KeyValueStore();
     kv.accept("one=two ");
     kv.accept("Three= four");
     kv.accept("5=6");

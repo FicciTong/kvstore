@@ -1,8 +1,8 @@
 package io.github.ficcitong.kvstore;
 
-class LeafNode<E extends Comparable<E>> extends Node<E> {
+class LeafNode extends Node {
 
-  protected LeafNode<E> rightSibling;
+  protected LeafNode rightSibling;
 
   public LeafNode() {
     this.elements = new KeyValuePair[ORDER + 1];
@@ -28,7 +28,6 @@ class LeafNode<E extends Comparable<E>> extends Node<E> {
     return -1;
   }
 
-  @SuppressWarnings("unchecked")
   public void insertKeyValuePair(KeyValuePair kvpair) {
     int index = 0;
     while (index < this.getElementCount() && ((KeyValuePair) this.getElement(index)).getKey()
@@ -44,7 +43,7 @@ class LeafNode<E extends Comparable<E>> extends Node<E> {
         int newValue = Integer.parseInt(curKvPair.getValue()) + Integer.parseInt(kvpair.getValue());
         curKvPair.setValue("" + newValue);
       } else {
-        this.setElement(index, (E) kvpair);
+        this.setElement(index, kvpair);
       }
     } else {
       // move space for the new key
@@ -53,7 +52,7 @@ class LeafNode<E extends Comparable<E>> extends Node<E> {
       }
 
       // insert new key and value
-      this.setElement(index, (E) kvpair);
+      this.setElement(index, kvpair);
       ++this.elementCount;
     }
 
@@ -69,10 +68,10 @@ class LeafNode<E extends Comparable<E>> extends Node<E> {
   }
 
   @Override
-  protected LeafNode<E> split() {
+  protected LeafNode split() {
     int midIndex = this.getElementCount() / 2;
 
-    LeafNode<E> newNode = new LeafNode<E>();
+    LeafNode newNode = new LeafNode();
     for (int i = midIndex; i < this.getElementCount(); ++i) {
       newNode.setElement(i - midIndex, this.getElement(i));
       this.setElement(i, null);
@@ -84,11 +83,11 @@ class LeafNode<E extends Comparable<E>> extends Node<E> {
   }
 
   @Override
-  protected Node<E> solveOverflow() {
-    LeafNode<E> newNode = this.split();
+  protected Node solveOverflow() {
+    LeafNode newNode = this.split();
 
     if (this.getParent() == null) {
-      this.setParent(new InnerNode<E>());
+      this.setParent(new InnerNode());
     }
     newNode.setParent(this.getParent());
 
@@ -100,18 +99,18 @@ class LeafNode<E extends Comparable<E>> extends Node<E> {
     int midIndex = this.getElementCount() / 2;
     String upKey = ((KeyValuePair) this.getElement(midIndex)).getKey();
 
-    InnerNode<E> newInnerNode = (InnerNode<E>) this.getParent();
+    InnerNode newInnerNode = (InnerNode) this.getParent();
     return newInnerNode.pushKeyUp(upKey, this, newNode);
   }
 
-  public LeafNode<E> getRightSibling() {
+  public LeafNode getRightSibling() {
     if (this.rightSibling != null && this.rightSibling.getParent() == this.getParent()) {
       return this.rightSibling;
     }
     return null;
   }
 
-  public void setRightSibling(LeafNode<E> rightSibling) {
+  public void setRightSibling(LeafNode rightSibling) {
     this.rightSibling = rightSibling;
   }
 
