@@ -25,4 +25,8 @@ class KeyValuePair {
     this.value = value;
   }
 
+  protected String printToString() {
+    return this.key + "=" + this.value;
+  }
+
 }

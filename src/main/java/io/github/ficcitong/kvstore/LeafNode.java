@@ -1,8 +1,10 @@
 package io.github.ficcitong.kvstore;
 
+import java.util.ArrayList;
+
 class LeafNode extends Node {
 
-  protected LeafNode rightSibling;
+  private LeafNode rightSibling;
 
   public LeafNode() {
     this.elements = new KeyValuePair[ORDER + 1];
@@ -38,8 +40,8 @@ class LeafNode extends Node {
     if (this.getElement(index) != null && ((KeyValuePair) this.getElement(index)).getKey()
         .toLowerCase().compareTo(kvpair.getKey().toLowerCase()) == 0) {
       // add for integers or replace for integers
-      if (isNumeric(kvpair.getKey())) {
-        KeyValuePair curKvPair = ((KeyValuePair) this.getElement(index));
+      KeyValuePair curKvPair = ((KeyValuePair) this.getElement(index));
+      if (isNumeric(kvpair.getValue()) && isNumeric(curKvPair.getValue())) {
         int newValue = Integer.parseInt(curKvPair.getValue()) + Integer.parseInt(kvpair.getValue());
         curKvPair.setValue("" + newValue);
       } else {
@@ -104,14 +106,24 @@ class LeafNode extends Node {
   }
 
   public LeafNode getRightSibling() {
-    if (this.rightSibling != null && this.rightSibling.getParent() == this.getParent()) {
-      return this.rightSibling;
-    }
-    return null;
+    return this.rightSibling;
   }
 
   public void setRightSibling(LeafNode rightSibling) {
     this.rightSibling = rightSibling;
+  }
+
+  protected String printToString() {
+
+    ArrayList<String> strArr = new ArrayList<String>();
+    int index = 0;
+
+    while (this.elements[index] != null) {
+      strArr.add(((KeyValuePair) this.elements[index]).printToString());
+      index += 1;
+    }
+
+    return String.join("\n", strArr);
   }
 
 }

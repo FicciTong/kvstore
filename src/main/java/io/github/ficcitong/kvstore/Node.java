@@ -1,7 +1,7 @@
 package io.github.ficcitong.kvstore;
 
 abstract class Node {
-  protected static final int ORDER = 2;
+  protected static final int ORDER = 4;
 
   protected Object[] elements;
   protected int elementCount;
