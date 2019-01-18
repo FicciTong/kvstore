@@ -65,9 +65,14 @@ public class KeyValueStore implements KeysAndValues {
       }
 
       // Get complete atomic group count
-      int atomicCount = 0;
+      int atomicCount = -1;
       for (int i = 0; i < 3; i++) {
-        atomicCount = Math.min(atomicCount, atomicListArray[i].size());
+        if (atomicCount == -1) {
+          atomicCount = atomicListArray[i].size();
+        } else {
+          atomicCount = Math.min(atomicCount, atomicListArray[i].size());
+        }
+
       }
 
       // Pop complete groups and insert into insertList

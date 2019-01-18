@@ -24,8 +24,8 @@ public class KeyValueStoreTest {
 
   @Test
   public void testKeyValueStore1() {
-    String expectedStr = "441=1\n442=2\n500=3";
-    kvStoreToTest.accept("441=1, 442=2, 500=3");
+    String expectedStr = "1=gg\n441=1\n442=2\n500=3";
+    kvStoreToTest.accept("1=gg,441=1, 442=2, 500=3");
     assertTrue(expectedStr.equals(kvStoreToTest.display()));
   }
 
