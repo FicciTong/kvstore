@@ -124,7 +124,7 @@ class InnerNode extends Node {
   protected Node solveOverflow() {
     Node newNode = this.split();
 
-    // If this is the parent node, initiate a new parent node.
+    // If this is the parent node, create a new parent node.
     if (this.getParent() == null) {
       this.setParent(new InnerNode());
     }

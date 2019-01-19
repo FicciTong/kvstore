@@ -31,8 +31,9 @@ public class KeyValueStore implements KeysAndValues {
   @SuppressWarnings("unchecked")
   public void accept(String kvPairs) {
     // If the input is empty, handle empty error.
-    if (kvPairs.trim() == "") {
+    if ("".equals(kvPairs.trim())) {
       errorListener.onError("Empty String");
+      return;
     }
 
     try {
@@ -45,23 +46,33 @@ public class KeyValueStore implements KeysAndValues {
 
       String[] kvPairsList = kvPairs.trim().split(",");
       for (String kvPair : kvPairsList) {
-        String key = kvPair.split("=")[0].trim();
-        String value = kvPair.split("=")[1].trim();
+        try {
+          String key = kvPair.split("=")[0].trim();
+          String value = kvPair.split("=")[1].trim();
 
-        // Inserting members of atomic group into corresponding list.
-        switch (key) {
-          case "441":
-            atomicListArray[0].add(new KeyValuePair(key, value));
-            break;
-          case "442":
-            atomicListArray[1].add(new KeyValuePair(key, value));
-            break;
-          case "500":
-            atomicListArray[2].add(new KeyValuePair(key, value));
-            break;
-          default:
-            insertList.add(new KeyValuePair(key, value));
-            break;
+          if ("".equals(key) || "".equals(value)) {
+            errorListener.onError("Error with specific input pair: " + kvPair);
+            return;
+          }
+
+          // Inserting members of atomic group into corresponding list.
+          switch (key) {
+            case "441":
+              atomicListArray[0].add(new KeyValuePair(key, value));
+              break;
+            case "442":
+              atomicListArray[1].add(new KeyValuePair(key, value));
+              break;
+            case "500":
+              atomicListArray[2].add(new KeyValuePair(key, value));
+              break;
+            default:
+              insertList.add(new KeyValuePair(key, value));
+              break;
+          }
+        } catch (Exception e) {
+          errorListener.onError("Error with specific input pair: " + kvPair, e);
+          return;
         }
       }
 
@@ -130,6 +141,7 @@ public class KeyValueStore implements KeysAndValues {
     // Report error if the tree is empty. Could've provide a isEmpty() method instead.
     if (this.root.getNodeType() == NodeType.LeafNode && this.root.getElementCount() == 0) {
       errorListener.onError("The Key Value Store is empty");
+      return "-1";
     }
     try {
       Node node = this.root;
@@ -187,6 +199,7 @@ public class KeyValueStore implements KeysAndValues {
       }
     } catch (Exception e) {
       errorListener.onError("Error when inserting key value pair - " + kvPair.printToString(), e);
+      return;
     }
 
   }

@@ -119,7 +119,7 @@ class LeafNode extends Node {
   protected Node solveOverflow() {
     LeafNode newNode = this.split();
 
-    // If parent is null, instantiate new inner node as parent.
+    // If parent is null, create new inner node as parent.
     if (this.getParent() == null) {
       this.setParent(new InnerNode());
     }
