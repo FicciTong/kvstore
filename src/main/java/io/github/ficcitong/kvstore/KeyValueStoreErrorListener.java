@@ -26,6 +26,8 @@ class KeyValueStoreErrorListener implements ErrorListener {
   public void onError(String msg, Exception e) {
     System.out.println("Error: " + msg);
     System.out.println("Error Details: " + e.toString());
+    System.out.println("Error Stack Trace: ");
+    e.printStackTrace();
   }
 
   /**

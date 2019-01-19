@@ -47,6 +47,7 @@ public class KeyValueStore implements KeysAndValues {
       for (String kvPair : kvPairsList) {
         String key = kvPair.split("=")[0].trim();
         String value = kvPair.split("=")[1].trim();
+
         // Inserting members of atomic group into corresponding list.
         switch (key) {
           case "441":
@@ -72,7 +73,6 @@ public class KeyValueStore implements KeysAndValues {
         } else {
           atomicCount = Math.min(atomicCount, atomicListArray[i].size());
         }
-
       }
 
       // Pop complete groups and insert into insertList
@@ -83,30 +83,34 @@ public class KeyValueStore implements KeysAndValues {
         atomicCount -= 1;
       }
 
-      // Get the missing atomic group set
-      HashSet<String> missingSet = new HashSet<String>();
-      for (int i = 0; i < 3; i++) {
-        if (atomicListArray[i].size() > 0) {
-          switch (i) {
-            case 0:
-              missingSet.add("441");
-              break;
-            case 1:
-              missingSet.add("442");
-              break;
-            case 2:
-              missingSet.add("500");
-              break;
-            default:
-              break;
+      // Check if there are incomplete atomic groups
+      if (atomicListArray[0].size() + atomicListArray[1].size() + atomicListArray[2].size() > 0) {
+        // Get the missing atomic group set
+        HashSet<String> missingSet = new HashSet<String>();
+        for (int i = 0; i < 3; i++) {
+          if (atomicListArray[i].size() == 0) {
+            switch (i) {
+              case 0:
+                missingSet.add("441");
+                break;
+              case 1:
+                missingSet.add("442");
+                break;
+              case 2:
+                missingSet.add("500");
+                break;
+              default:
+                break;
+            }
           }
+        }
+
+        // Report incomplete atomic group only if missing set is not empty
+        if (missingSet.size() > 0) {
+          errorListener.onIncompleteAtomicGroup(ATOMIC_GROUP, missingSet);
         }
       }
 
-      // Report incomplete atomic group only if missing set is not empty
-      if (missingSet.size() > 0) {
-        errorListener.onIncompleteAtomicGroup(ATOMIC_GROUP, missingSet);
-      }
 
       // Finally inserting the list
       for (KeyValuePair kvPair : insertList) {
