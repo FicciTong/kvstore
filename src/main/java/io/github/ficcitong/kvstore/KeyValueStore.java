@@ -1,3 +1,7 @@
+/**
+ * Using google's CheckStyle formatter.
+ */
+
 package io.github.ficcitong.kvstore;
 
 import java.util.ArrayList;
@@ -7,6 +11,9 @@ import java.util.LinkedList;
 import java.util.Set;
 import javax.inject.Inject;
 
+/**
+ * My implementation of provided KeysAndValues interface.
+ */
 public class KeyValueStore implements KeysAndValues {
   private final KeyValueStoreErrorListener errorListener;
   private Node root;

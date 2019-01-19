@@ -1,6 +1,7 @@
 package io.github.ficcitong.kvstore;
 
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -92,8 +93,8 @@ public class KeyValueStoreTest {
     /**
      * Case insensitivity test
      */
-    kvStoreToTest.accept("  1  =  1  ,   a = a ");
-    String expectedStr = "1=1\na=a";
+    kvStoreToTest.accept("fiCCi=happy,Ficci=hahaha");
+    String expectedStr = "Ficci=hahaha";
     assertTrue(expectedStr.equals(kvStoreToTest.display()));
   }
 
